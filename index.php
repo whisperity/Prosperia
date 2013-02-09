@@ -6,32 +6,6 @@ use Prosperia\Tokn\ToknData as ToknData;
 use Prosperia\Stor\StorFromData as StorFromData;
 use Prosperia\Stor\StorToFile as StorToFile;
 
-use Prosperia\Tokn\ToknFile as ToknFile;
-use Prosperia\Stor\StorFromFile as StorFromFile;
-
-if ( isset($_GET['token']))
-{
-    $token = new ToknFile($_GET['token']);
-    $stor = new Stor(new StorFromFile("var/stor/" . $token->getReference()));
-    
-    header("Content-Disposition: inline;");
-    header("Content-Type: " .$stor->getType());
-    header("Content-Length: " .$stor->getSize());
-    
-    $location = 0;
-    set_time_limit(0);
-    while ( $location <= $stor->getSize() )
-    {
-        print( substr($stor->getContent(), $location, 8192) );
-        ob_flush();
-        flush();
-        
-        $location += 8192;
-    }
-    
-    die();
-    
-}
 ?>
 
 <!DOCTYPE html>
@@ -103,7 +77,7 @@ function selfURL()
                     
                     echo "File uploaded successfully. Token is: <strong>" . $token->getName() . "</strong>.<br>";
                     
-                    $retrieve = str_replace(basename(__FILE__), "i/" . $token->getName(), selfURL());
+                    $retrieve = str_replace(basename(__FILE__), "t/" . $token->getName(), selfURL());
                     echo "Retrieve as: <a href=\"$retrieve\" target=\"_blank\">$retrieve</a>";
                     
                     exit;

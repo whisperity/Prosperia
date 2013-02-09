@@ -1,5 +1,5 @@
-Options +FollowSymLinks
+Options +FollowSymLinks -Indexes
 RewriteEngine On
 RewriteCond %{SCRIPT_FILENAME} !-d
 RewriteCond %{SCRIPT_FILENAME} !-f
-RewriteRule ^i/(.*)$ ./index.php?token=$1
+RewriteRule ^t/(.*)$ ./get.php?token=$1
