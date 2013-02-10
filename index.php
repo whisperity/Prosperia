@@ -1,13 +1,13 @@
 <?php
-namespace Prosperia;
+require_once "lib/Prosperia/bootstrap.php";
+require_once "inc/misc.php";
 
-include("lib/Prosperia/bootstrap.php");
 use Prosperia\Tokn\ToknData as ToknData;
+use Prosperia\Stor as Stor;
 use Prosperia\Stor\StorFromData as StorFromData;
 use Prosperia\Stor\StorToFile as StorToFile;
 
 ?>
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,57 +15,39 @@ use Prosperia\Stor\StorToFile as StorToFile;
         <title>Prosperia</title>
     </head>
     <body>
-        
 <?php
-function selfURL()
-{
-	/**
-	 * This function generates the full URL of the current request.
-	*/
-	
-	// Define whether HTTPS (secure HTTP) is on
-	$s = empty($_SERVER["HTTPS"]) ? ''
-		: ($_SERVER["HTTPS"] == "on") ? "s"
-		: "";
-	
-	// Get the protocol itself
-	$protocol = substr(strtolower($_SERVER["SERVER_PROTOCOL"]), 0, strpos(strtolower($_SERVER["SERVER_PROTOCOL"]), "/")).$s;
-	
-	// Get the port or use HTTP 80 by default
-	$port = ($_SERVER["SERVER_PORT"] == "80") ? ""
-		: (":".$_SERVER["SERVER_PORT"]);
-	
-	// Fetch a proper URL from the data and the current request
-	return $protocol."://".$_SERVER['SERVER_NAME'].$port.$_SERVER['REQUEST_URI'];
-}
-
 if ( isset($_FILES['images']) )
 {
-    echo "<span style=\"color: darkorange; font-weight: bold;\">Uploading " .count($_FILES['images']['name']).
-        " files.</span><br />";
+    echo "\t\t<span style=\"color: darkorange; font-weight: bold;\">Uploading " .count($_FILES['images']['name']).
+        " files</span>...<br />\n";
+    
+    echo "\t\t<table border=\"1\" style=\"width: 100%;\">\n";
+    echo "\t\t\t<tr>\n";
+    echo "\t\t\t\t<th>Filename</th>\n";
+    echo "\t\t\t\t<th>Status</th>\n";
+    echo "\t\t\t\t<th>Thumbnail</th>\n";
+    echo "\t\t\t\t<th>Retrieve URL</th>\n";
+    echo "\t\t\t\t<th>Delete URL</th>\n";
+    echo "\t\t\t</tr>\n";
+    
     for ($i = 0; $i < count($_FILES['images']['name']); $i++)
     {
-        $allowed_types = array('image/jpeg', 'image/png', 'image/gif');
+        echo "\t\t\t<tr>\n";
+        
+        $allowed_types = array('image/jpeg',
+            'image/png',
+            'image/gif'
+        );
         
         if (in_array($_FILES['images']['type'][$i], $allowed_types, true))
         {
-            $chars = "012345abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            $random = null;
-            
-            for ($j = 0; $j <= 8; $j++)
-            {
-                $random .= $chars[rand(0, strlen($chars) - 1)];
-            }
-            
-            $token = new ToknData($random, str_shuffle(sha1(time())));
-            
-            $upload_content = file_get_contents($_FILES['images']['tmp_name'][$i]);
+            $token = new ToknData(generateRandomChars(8), str_shuffle(sha1(time())));
             
             $stor = new Stor(new StorFromData(
                 $_FILES['images']['name'][$i],
                 $_FILES['images']['type'][$i],
                 $_FILES['images']['size'][$i],
-                $upload_content
+                file_get_contents($_FILES['images']['tmp_name'][$i])
             ));
             
             $writer = new StorToFile($stor, "var/stor/" . $token->getReference());
@@ -75,16 +57,25 @@ if ( isset($_FILES['images']) )
             
             $retrieve = str_replace(basename(__FILE__), "t/" . $token->getName(), selfURL());
             
-            echo "<span style=\"color: darkgreen; font-weight: bold;\">Successfully uplodaded <i>" .
-                $_FILES['images']['name'][$i]. "</i>.</span> Retrieve URL: <a href=\"$retrieve\" " .
-                "target=\"_blank\">$retrieve</a>.<br />";
+            echo "\t\t\t\t<td>" .$_FILES['images']['name'][$i]. "</td>\n";
+            echo "\t\t\t\t<td style=\"color: darkgreen; font-weight: bold;\">Successfully uploaded</td>\n";
+            echo "\t\t\t\t<td>" . "thumbnail placeholder" . "</td>\n";
+            echo "\t\t\t\t<td><a href=\"$retrieve\" target=\"_blank\">$retrieve</a></td>\n";
+            echo "\t\t\t\t<td>" . "delete placeholder" . "</td>\n";
         }
         else
         {
-            echo "<span style=\"color: red; font-weight: bold;\">Won't upload <i>" .$_FILES['images']['name'][$i].
-                "</i>.</span> Type <i>" .$_FILES['images']['type'][$i]. "</i> is not allowed.<br />";
+            echo "\t\t\t\t<td>" .$_FILES['images']['name'][$i]. "</td>\n";
+            echo "\t\t\t\t<td style=\"color: red; font-weight: bold;\">Won't upload</td>\n";
+            echo "\t\t\t\t<td colspan=\"3\">" .
+                "Type <i>" .$_FILES['images']['type'][$i]. "</i> is not allowed." . "</td>\n";
         }
+        
+        echo "\t\t\t</tr>\n";
     }
+    echo "\t\t</table>\n";
+    
+    echo "\t\t<span style=\"color: darkgreen; font-weight: bold;\">Uploading finished.</span><br />\n";
 }
 else
 {
