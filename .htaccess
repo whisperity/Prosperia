@@ -2,4 +2,6 @@ Options +FollowSymLinks -Indexes
 RewriteEngine On
 RewriteCond %{SCRIPT_FILENAME} !-d
 RewriteCond %{SCRIPT_FILENAME} !-f
-RewriteRule ^t/(.*)$ ./get.php?token=$1
+RewriteRule ^g/(.*)$ ./get.php?token=$1
+RewriteRule ^t/(.*)/(.*)$ ./thumbnail.php?token=$1&size=$2
+RewriteRule ^t/(.*?)$ ./thumbnail.php?token=$1
