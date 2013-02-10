@@ -57,9 +57,11 @@ if ( isset($_FILES['images']) )
             
             $retrieve = str_replace(basename(__FILE__), "t/" . $token->getName(), selfURL());
             
+            $thumbnail = new Prosperia\Thumbnail($stor);
+            
             echo "\t\t\t\t<td>" .$_FILES['images']['name'][$i]. "</td>\n";
             echo "\t\t\t\t<td style=\"color: darkgreen; font-weight: bold;\">Successfully uploaded</td>\n";
-            echo "\t\t\t\t<td>" . "thumbnail placeholder" . "</td>\n";
+            echo "\t\t\t\t<td>" . $thumbnail->get() . "</td>\n";
             echo "\t\t\t\t<td><a href=\"$retrieve\" target=\"_blank\">$retrieve</a></td>\n";
             echo "\t\t\t\t<td>" . "delete placeholder" . "</td>\n";
         }
