@@ -44,7 +44,8 @@ if ( isset($_FILES['images']) )
     {
         echo "\t\t\t<tr>\n";
         
-        $allowed_types = array('image/jpeg',
+        $allowed_types = array(
+            'image/jpeg',
             'image/png',
             'image/gif'
         );
