@@ -3,5 +3,6 @@ RewriteEngine On
 RewriteCond %{SCRIPT_FILENAME} !-d
 RewriteCond %{SCRIPT_FILENAME} !-f
 RewriteRule ^g/(.*)$ ./get.php?token=$1
-RewriteRule ^t/(.*)/(.*)$ ./thumbnail.php?token=$1&size=$2
-RewriteRule ^t/(.*?)$ ./thumbnail.php?token=$1
+RewriteRule ^t/(.*?)/(.*)$ ./thumbnail.php?token=$1&size=$2
+RewriteRule ^t/(.*)$ ./thumbnail.php?token=$1
+RewriteRule ^d/(.*?)/(.*)$ ./delete.php?token=$1&key=$2

@@ -21,6 +21,7 @@ class StorToFile implements IStorWriter
         fwrite($this->handle, $this->stor->getType() . "\x02");
         fwrite($this->handle, $this->stor->getSize() . "\x03");
         fwrite($this->handle, $this->stor->getHash() . "\x04");
+        fwrite($this->handle, $this->stor->getSecretKey() . "\x05");
         
         fwrite($this->handle, $this->stor->getContent());
     }

@@ -11,6 +11,7 @@ class Stor
     private $size = null;
     private $hash = null;
     private $content = null;
+    private $secretKey = null;
     
     public function __construct(IStorLoader $loader)
     {
@@ -22,6 +23,7 @@ class Stor
         $this->size = $data['size'];
         $this->hash = $data['hash'];
         $this->content = $data['content'];
+        $this->secretKey = $data['secretKey'];
     }
     
     public function getOriginalFilename()
@@ -47,5 +49,10 @@ class Stor
     public function getContent()
     {
         return $this->content;
+    }
+    
+    public function getSecretKey()
+    {
+        return $this->secretKey;
     }
 }

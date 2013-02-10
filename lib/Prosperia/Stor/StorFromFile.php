@@ -37,15 +37,11 @@ class StorFromFile implements IStorLoader
             'originalFilename'  =>  $this->fread_until_delimiter($this->handle, "\x01"),
             'type'  =>  $this->fread_until_delimiter($this->handle, "\x02"),
             'size'  =>  $this->fread_until_delimiter($this->handle, "\x03"),
-            'hash'  =>  $this->fread_until_delimiter($this->handle, "\x04")
+            'hash'  =>  $this->fread_until_delimiter($this->handle, "\x04"),
+            'secretKey'    =>  $this->fread_until_delimiter($this->handle, "\x05")
         );
         
         $this->stordata['content'] = fread($this->handle, (int)$this->stordata['size']);
-        
-        if (sha1($this->stordata['content']) !== $this->stordata['hash'])
-        {
-            throw new \Exception("Hash mismatch.");
-        }
     }
     
     public function __destruct()

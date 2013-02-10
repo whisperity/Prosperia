@@ -13,7 +13,8 @@ class StorFromData implements IStorLoader
             'type'  =>  $type,
             'size'  =>  $size,
             'hash'  =>  sha1($content),
-            'content'   =>  $content
+            'content'   =>  $content,
+            'secretKey' =>  generateRandomChars(16)
         );
     }
     
