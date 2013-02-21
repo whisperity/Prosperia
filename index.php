@@ -56,9 +56,13 @@ if ( isset($_FILES['images']) )
             $stor = new Stor(new StorFromData(
                 $_FILES['images']['name'][$i],
                 $_FILES['images']['type'][$i],
-                $_FILES['images']['size'][$i],
                 file_get_contents($_FILES['images']['tmp_name'][$i])
             ));
+            
+            if ($stor->getSize() !== $_FILES['images']['size'][$i])
+            {
+                throw new Exception("Content and content size mismatch");
+            }
             
             $token->write();
             $stor->write(new StorToFile("var/stor/" . $token->getReference()));

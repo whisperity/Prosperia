@@ -6,12 +6,12 @@ class StorFromData implements IStorLoader
 {
     private $stordata = array();
     
-    public function __construct($originalFilename, $type, $size, $content)
+    public function __construct($originalFilename, $type, $content)
     {
         $this->stordata = array(
             'originalFilename'  =>  $originalFilename,
             'type'  =>  $type,
-            'size'  =>  $size,
+            'size'  =>  (int)strlen($content),
             'hash'  =>  sha1($content),
             'content'   =>  $content,
             'secretKey' =>  generateRandomChars(16)
