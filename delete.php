@@ -1,6 +1,5 @@
 <?php
 require_once "lib/Prosperia/bootstrap.php";
-require_once "inc/misc.php";
 
 use Prosperia\Tokn\ToknFile as ToknFile;
 use Prosperia\Stor as Stor;
