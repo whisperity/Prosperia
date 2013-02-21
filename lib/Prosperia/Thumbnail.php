@@ -20,7 +20,7 @@ class Thumbnail
         $this->type = $stor->getType();
         $this->content = $stor->getContent();
         
-        $this->filename = "var/temp".generateRandomChars(4, "0123456789");
+        $this->filename = "var/tempthumb".generateRandomChars(4, "0123456789");
         
         if (!isset($width))
         {
@@ -56,6 +56,12 @@ class Thumbnail
         $height = ($this->width / $width_orig) * $height_orig;
         
         $thumbnail = imagecreatetruecolor($this->width, $height);
+        
+        if ($thumbnail === FALSE)
+        {
+            throw new \Exception("GD was unable to create the thumbnail image.");
+        }
+        
         $image = imagecreatefromstring($this->content);
         imagecopyresampled($thumbnail, $image, 0, 0, 0, 0, $this->width, $height, $width_orig, $height_orig);
         

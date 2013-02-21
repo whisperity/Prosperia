@@ -30,6 +30,11 @@ class ToknData implements ITokn
     
     public function write()
     {
-        file_put_contents("var/tokn/".$this->name, $this->reference . "\n");
+        $result = @file_put_contents("var/tokn/".$this->name, $this->reference . "\n");
+        
+        if ($result === FALSE)
+        {
+            throw new \Exception("Failed to open stream: " . "var/tokn/".$this->name);
+        }
     }
 }

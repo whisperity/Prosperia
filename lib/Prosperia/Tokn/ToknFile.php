@@ -25,7 +25,12 @@ class ToknFile implements ITokn
     
     public function read()
     {
-        $this->reference = file_get_contents("var/tokn/".$this->name, false, NULL, -1, 40);
+        $this->reference = @file_get_contents("var/tokn/".$this->name, false, NULL, -1, 40);
+        
+        if ($this->reference === FALSE)
+        {
+            throw new \Exception("Failed to open stream: " . "var/tokn/".$this->name);
+        }
     }
     
     public function write()

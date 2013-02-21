@@ -8,7 +8,12 @@ class StorToFile implements IStorWriter
     
     public function __construct($file)
     {
-        $this->handle = fopen($file, "w+b");
+        $this->handle = @fopen($file, "w+b");
+        
+        if ($this->handle === FALSE)
+        {
+            throw new \Exception("Failed to open stream: " . $file);
+        }
     }
     
     public function write(array $stordata)

@@ -9,7 +9,12 @@ class StorFromFile implements IStorLoader
     
     public function __construct($file)
     {
-        $this->handle = fopen($file, "rb");
+        $this->handle = @fopen($file, "rb");
+        
+        if ($this->handle === FALSE)
+        {
+            throw new \Exception("Failed to open stream: " .$file);
+        }
     }
     
     public function fetch()
@@ -42,6 +47,16 @@ class StorFromFile implements IStorLoader
         );
         
         $this->stordata['content'] = fread($this->handle, (int)$this->stordata['size']);
+        
+        $this->checkSavedHash();
+    }
+    
+    private function checkSavedHash()
+    {
+        if (sha1($this->stordata['content']) !== $this->stordata['hash'])
+        {
+            throw new \Exception("Content and hash mismatch");
+        }
     }
     
     public function __destruct()
