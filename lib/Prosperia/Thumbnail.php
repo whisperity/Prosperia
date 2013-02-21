@@ -36,7 +36,23 @@ class Thumbnail
     
     private function make()
     {
-        list($width_orig, $height_orig) = @getimagesizefromstring($this->content);
+        // getimagesizefromstring() is implemented 5.4.0+ only.
+        if (version_compare(PHP_VERSION, "5.4.0", "<"))
+        {
+            $path = "var/oldphp".generateRandomChars(4, "0123456789");
+            $overridefile = fopen($path, "w+b");
+            fwrite($overridefile, $this->content);
+            fclose($overridefile);
+            
+            list($width_orig, $height_orig) = getimagesize($path);
+            
+            unlink($path);
+        }
+        else
+        {
+            list($width_orig, $height_orig) = getimagesizefromstring($this->content);
+        }
+        
         $height = ($this->width / $width_orig) * $height_orig;
         
         $thumbnail = imagecreatetruecolor($this->width, $height);

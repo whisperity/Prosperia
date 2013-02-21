@@ -6,7 +6,7 @@ use Prosperia\Tokn\ToknData as ToknData;
 use Prosperia\Stor as Stor;
 use Prosperia\Stor\StorFromData as StorFromData;
 use Prosperia\Stor\StorToFile as StorToFile;
-
+use Prosperia\Thumbnail as Thumbnail;
 ?>
 <!DOCTYPE html>
 <html>
@@ -68,7 +68,7 @@ if ( isset($_FILES['images']) )
             
             $retrieve_url = str_replace(basename(__FILE__), "g/" . $token->getName(), selfURL());
             
-            $thumbnail = new Prosperia\Thumbnail($stor);
+            $thumbnail = new Thumbnail($stor);
             $thumbnail_url = str_replace(basename(__FILE__), "t/" . $token->getName(), selfURL());
             
             $delete_url = str_replace(basename(__FILE__), "d/" . $token->getName() . "/" .
