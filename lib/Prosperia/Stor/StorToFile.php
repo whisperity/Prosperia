@@ -2,28 +2,24 @@
 
 namespace Prosperia\Stor;
 
-use Prosperia\Stor as Stor;
-
 class StorToFile implements IStorWriter
 {
-    private $stor = null;
     private $handle = null;
     
-    public function __construct(Stor $stor, $file)
+    public function __construct($file)
     {
-        $this->stor = $stor;
         $this->handle = fopen($file, "w+b");
     }
     
-    public function write()
+    public function write(array $stordata)
     {
-        fwrite($this->handle, $this->stor->getOriginalFilename() . "\x01");
-        fwrite($this->handle, $this->stor->getType() . "\x02");
-        fwrite($this->handle, $this->stor->getSize() . "\x03");
-        fwrite($this->handle, $this->stor->getHash() . "\x04");
-        fwrite($this->handle, $this->stor->getSecretKey() . "\x05");
+        fwrite($this->handle, $stordata['originalFilename'] . "\x01");
+        fwrite($this->handle, $stordata['type'] . "\x02");
+        fwrite($this->handle, $stordata['size'] . "\x03");
+        fwrite($this->handle, $stordata['hash'] . "\x04");
+        fwrite($this->handle, $stordata['secretKey'] . "\x05");
         
-        fwrite($this->handle, $this->stor->getContent());
+        fwrite($this->handle, $stordata['content'], (int)$stordata['size']);
     }
     
     public function __destruct()

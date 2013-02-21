@@ -60,10 +60,8 @@ if ( isset($_FILES['images']) )
                 file_get_contents($_FILES['images']['tmp_name'][$i])
             ));
             
-            $writer = new StorToFile($stor, "var/stor/" . $token->getReference());
-            
             $token->write();
-            $writer->write();
+            $stor->write(new StorToFile("var/stor/" . $token->getReference()));
             
             $retrieve_url = str_replace(basename(__FILE__), "g/" . $token->getName(), selfURL());
             

@@ -3,6 +3,7 @@
 namespace Prosperia;
 
 use Prosperia\Stor\IStorLoader as IStorLoader;
+use Prosperia\Stor\IStorWriter as IStorWriter;
 
 class Stor
 {
@@ -54,5 +55,19 @@ class Stor
     public function getSecretKey()
     {
         return $this->secretKey;
+    }
+    
+    public function write(IStorWriter $writer)
+    {
+        $stordata = array(
+            'originalFilename'  =>  $this->getOriginalFilename(),
+            'type'  =>  $this->getType(),
+            'size'  =>  $this->getSize(),
+            'hash'  =>  $this->getHash(),
+            'content'   =>  $this->getContent(),
+            'secretKey' =>  $this->getSecretKey()
+        );
+        
+        $writer->write($stordata);
     }
 }

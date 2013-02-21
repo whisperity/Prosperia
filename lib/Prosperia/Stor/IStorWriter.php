@@ -4,5 +4,5 @@ namespace Prosperia\Stor;
 
 interface IStorWriter
 {
-    public function write();
+    public function write(array $stordata);
 }
